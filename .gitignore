@@ -1,0 +1,36 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Docker volumes data
+redis_data/
+static_volume/
+media_volume/
+
+# Local volumes paths
+chemin_vers_static_depuis_vps/
+chemin_vers_media_depuis_vps/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# SSL certificates (if stored locally)
+certs/
+dhparam/
+vhost/
+html/

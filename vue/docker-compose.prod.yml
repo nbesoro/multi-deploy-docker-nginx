@@ -1,0 +1,19 @@
+services:
+  # Frontend Vue.js
+  frontend:
+    image: ghcr.io/nbesoro/daily-goals-finance-app:latest
+    restart: unless-stopped
+    expose:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=productivity.nbesoro.com
+      - LETSENCRYPT_HOST=productivity.nbesoro.com
+      - LETSENCRYPT_EMAIL=votre-email@domain.com
+      - VIRTUAL_PORT=80
+      - VITE_API_BASE_URL=https://goals-api.nbesoro.com
+    networks:
+      - net
+
+networks:
+  net:
+    external: true

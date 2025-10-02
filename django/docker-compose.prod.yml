@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+    # Redis for caching/sessions
+    redis:
+        image: redis:7-alpine
+        restart: unless-stopped
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+        networks:
+            - net
+
+    # Django API
+    api:
+        image: ghcr.io/nbesoro/daily-goals-finance-api:latest
+        restart: unless-stopped
+        command: ./start.sh
+        expose:
+            - "8010"
+        environment:
+            - VIRTUAL_HOST=goals-api.nbesoro.com
+            - LETSENCRYPT_HOST=goals-api.nbesoro.com
+            - LETSENCRYPT_EMAIL=votre-email@domain.com
+            - VIRTUAL_PORT=8010
+        volumes:
+            - static_volume:/app/staticfiles
+            - media_volume:/app/media
+            - /app/__pycache__
+            - ./chemin_vers_static_depuis_vps/static:/app/staticfiles # Volume pour les fichiers statiques
+            - ./chemin_vers_media_depuis_vps/media:/app/media # Volume pour les fichiers media
+        depends_on:
+            - redis
+        env_file:
+            - .env
+        networks:
+            - net
+
+    celery_prod:
+        image: ghcr.io/nbesoro/daily-goals-finance-api:latest
+        command: ["celery", "-A", "core", "worker", "--loglevel=info"]
+        environment:
+            - PYTHONUNBUFFERED=1
+        depends_on:
+            - api
+            - redis
+        restart: always
+        env_file:
+            - .env
+        networks:
+            - "net"
+    
+    celery-beat-prod:
+        image: ghcr.io/nbesoro/daily-goals-finance-api:latest
+        command: ["celery", "-A", "core", "beat", "--loglevel=info"]
+        environment:
+            - PYTHONUNBUFFERED=1
+        depends_on:
+            - api
+            - redis
+        restart: always
+        env_file:
+            - .env
+        networks:
+            - "net"
+networks:
+    net:
+        external: true
+volumes:
+    redis_data:
+
