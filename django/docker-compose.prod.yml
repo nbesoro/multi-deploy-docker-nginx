@@ -17,6 +17,7 @@ services:
         image: ghcr.io/nbesoro/daily-goals-finance-api:latest
         restart: unless-stopped
         command: ./start.sh
+        user: "1000:1000"
         expose:
             - "8010"
         environment:
