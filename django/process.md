@@ -91,3 +91,18 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 ```
+
+8. Creer les dossier static et media
+
+```bash
+mkdir static
+
+mkdir media
+```
+
+9. Ajouter les permissions aux dossier
+```bash
+sudo chown -R 1000:1000 media
+
+sudo chown -R 1000:1000 static
+```
