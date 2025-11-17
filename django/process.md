@@ -106,3 +106,73 @@ sudo chown -R 1000:1000 media
 
 sudo chown -R 1000:1000 static
 ```
+
+10. Créer une base PostgreSQL sur le serveur ubuntu
+
+## Installer PostgreSQL sur Ubuntu
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+```
+
+## Vérifier que PostgreSQL tourne
+``` bash
+sudo systemctl status postgresql
+```
+
+11. Créer un utilisateur PostgreSQL
+```bash
+sudo -u postgres psql
+```
+
+Ensuite:
+```sql
+CREATE USER tyaouser WITH PASSWORD 'ton_mot_de_passe';
+```
+
+Droits:
+```sql
+ALTER USER tyaouser CREATEDB;
+```
+
+Quitte PostgreSQL :
+```sql
+\q
+```
+
+12. Créer la base de données
+```bash
+sudo -u postgres createdb -O tyaouser nom_de_ta_base
+```
+
+## Installer le client PostgreSQL dans ton projet Django
+```bash
+pip install psycopg2-binary
+```
+
+## Configurer Django pour utiliser PostgreSQL
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django_db',        # Le nom de ta base
+        'USER': 'tyaouser',         # L'utilisateur PostgreSQL
+        'PASSWORD': 'ton_mot_de_passe',
+        'HOST': 'localhost',        # ou l’IP du serveur
+        'PORT': '5432',             # port postgres par défaut
+    }
+}
+```
+
+## Tester la connexion Django → PostgreSQL
+Lance les migrations :
+```bash
+python manage.py migrate
+```
+
+Si tu vois :
+```nginx
+Applying auth.0001_initial... OK
+```
+
+🎉 La connexion fonctionne !
