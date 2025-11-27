@@ -55,6 +55,8 @@ docker run hello-world && echo "Docker successfully installed and running"
 ```
 si vous avez une erreur de permission, executer:
 
+docker: permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
+
 ```bash
 sudo usermod -aG docker $USER && newgrp docker
 ```
@@ -105,6 +107,12 @@ mkdir media
 sudo chown -R 1000:1000 media
 
 sudo chown -R 1000:1000 static
+
+# Sur ton VPS, donner les droits en écriture
+sudo chown -R 1000:1000 /home/ubuntu/django-app/staticfiles
+sudo chown -R 1000:1000 /home/ubuntu/django-app/media
+chmod -R 777 /home/ubuntu/django-app/staticfiles
+chmod -R 777 /home/ubuntu/django-app/media
 ```
 
 10. Créer une base PostgreSQL sur le serveur ubuntu
